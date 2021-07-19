@@ -6,7 +6,6 @@ import re
 import time
 from collections import namedtuple
 
-import utils
 from dateutil import parser as dateparser
 
 import anchore_engine.apis.authorization
@@ -32,7 +31,9 @@ from anchore_engine.db import (
     db_subscriptions,
     session_scope,
 )
-from anchore_engine.services.catalog.utils import diff_image_vulnerabilities
+from anchore_engine import utils as anchore_utils
+from anchore_engine.services.catalog import utils
+from anchore_engine.util.docker import parse_dockerimage_string
 from anchore_engine.subsys import logger, notifications, object_store, taskstate
 
 DeleteImageResponse = namedtuple("DeleteImageResponse", ["digest", "status", "detail"])
@@ -685,7 +686,7 @@ def validate_image_size(image_info):
         raise BadRequest(
             "Image size is too large based on max size specified in the configuration",
             detail={
-                "requested_image_compressed_size_mb": utils.bytes_to_mb(
+                "requested_image_compressed_size_mb": anchore_utils.bytes_to_mb(
                     image_info["compressed_size"], round_to=2
                 ),
                 "max_compressed_image_size_mb": localconfig.get(
@@ -1602,7 +1603,7 @@ def perform_vulnerability_scan(
 
         vdiff = {}
         if last_vuln_result and curr_vuln_result:
-            vdiff = diff_image_vulnerabilities(
+            vdiff = utils.diff_image_vulnerabilities(
                 old_result=last_vuln_result,
                 new_result=curr_vuln_result,
             )
@@ -1920,7 +1921,7 @@ def add_or_update_image(
 
     image_ids = {}
     for d in digests:
-        image_info = utils.parse_dockerimage_string(d)
+        image_info = parse_dockerimage_string(d)
         registry = image_info["registry"]
         repo = image_info["repo"]
         digest = image_info["digest"]
@@ -1935,7 +1936,7 @@ def add_or_update_image(
             image_ids[registry][repo]["digests"].append(digest)
 
     for d in tags:
-        image_info = utils.parse_dockerimage_string(d)
+        image_info = parse_dockerimage_string(d)
         registry = image_info["registry"]
         repo = image_info["repo"]
         digest = image_info["tag"]
@@ -2767,7 +2768,7 @@ def is_image_valid_size(image_info):
         max_compressed_image_size_mb
         and max_compressed_image_size_mb > -1
         and compressed_image_size
-        and utils.bytes_to_mb(compressed_image_size, round_to=2)
+        and anchore_utils.bytes_to_mb(compressed_image_size, round_to=2)
         > max_compressed_image_size_mb
     ):
         return False
