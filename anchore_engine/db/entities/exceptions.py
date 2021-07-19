@@ -4,9 +4,6 @@ Exception handling utilities and functions.
 NOTE: these are PostgreSQL specific, so any dialect change will require updates here.
 
 """
-from sqlalchemy.exc import ProgrammingError
-
-from anchore_engine.subsys import logger
 
 try:
     # Separate logger for use during bootstrap when logging may not be fully configured

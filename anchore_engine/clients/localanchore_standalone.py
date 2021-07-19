@@ -1,5 +1,4 @@
 import base64
-import collections
 import copy
 import filecmp
 import json
@@ -14,7 +13,6 @@ import uuid
 import retrying
 import treelib
 import yaml
-from pkg_resources import resource_filename
 
 import anchore_engine.auth.common
 import anchore_engine.clients.skopeo_wrapper

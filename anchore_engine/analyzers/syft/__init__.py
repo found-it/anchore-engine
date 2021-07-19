@@ -1,6 +1,6 @@
 import collections
 
-from anchore_engine.analyzers.utils import content_hints, defaultdict_to_dict, dig
+from anchore_engine.analyzers.utils import defaultdict_to_dict, dig
 from anchore_engine.clients.syft_wrapper import run_syft
 
 from ...subsys import logger
