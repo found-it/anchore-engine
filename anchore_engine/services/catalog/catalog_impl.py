@@ -14,7 +14,6 @@ import anchore_engine.common
 import anchore_engine.common.helpers
 import anchore_engine.common.images
 import anchore_engine.configuration.localconfig
-import anchore_engine.services.catalog
 import anchore_engine.subsys.events
 import anchore_engine.subsys.metrics
 import anchore_engine.subsys.object_store.manager
@@ -289,7 +288,9 @@ def repo(dbsession, request_inputs, bodycontent={}):
 
             # check and kick a repo watcher task if necessary
             try:
-                rc = anchore_engine.services.catalog.schedule_watcher("repo_watcher")
+                rc = anchore_engine.services.catalog.service.schedule_watcher(
+                    "repo_watcher"
+                )
                 logger.debug("scheduled repo_watcher task")
             except Exception as err:
                 logger.warn("failed to schedule repo_watcher task: " + str(err))

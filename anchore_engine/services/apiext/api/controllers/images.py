@@ -31,7 +31,7 @@ from anchore_engine.services.apiext.api.controllers.utils import (  # make_respo
 )
 from anchore_engine.subsys import logger, taskstate
 from anchore_engine.subsys.metrics import flask_metrics
-from anchore_engine.utils import parse_dockerimage_string
+from anchore_engine.util.docker import parse_dockerimage_string
 
 authorizer = get_authorizer()
 
