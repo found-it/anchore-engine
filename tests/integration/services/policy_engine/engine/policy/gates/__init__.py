@@ -3,6 +3,7 @@ import unittest
 from anchore_engine.db import get_thread_scoped_session
 from anchore_engine.services.policy_engine.engine.policy.gate import ExecutionContext
 
+
 class GateUnitTest(unittest.TestCase):
     __default_image__ = "node"
     gate_clazz = None

@@ -1,4 +1,3 @@
-
 import pytest
 
 from anchore_engine.db import Image, get_thread_scoped_session
