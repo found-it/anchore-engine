@@ -580,8 +580,6 @@ class SkopeoError(AnchoreException):
         out=None,
         msg="Error encountered in skopeo operation",
     ):
-        from anchore_engine.common.errors import AnchoreError
-
         self.cmd = " ".join(cmd) if isinstance(cmd, list) else cmd
         self.exitcode = rc
         self.stderr = (

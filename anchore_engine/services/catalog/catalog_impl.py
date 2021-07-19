@@ -6,6 +6,7 @@ import re
 import time
 from collections import namedtuple
 
+import utils
 from dateutil import parser as dateparser
 
 import anchore_engine.apis.authorization
@@ -17,8 +18,6 @@ import anchore_engine.services.catalog
 import anchore_engine.subsys.events
 import anchore_engine.subsys.metrics
 import anchore_engine.subsys.object_store.manager
-import anchore_engine.utils
-from anchore_engine import utils as anchore_utils
 from anchore_engine.apis.exceptions import AnchoreApiError, BadRequest
 from anchore_engine.auth import aws_ecr
 from anchore_engine.clients import docker_registry
@@ -685,7 +684,7 @@ def validate_image_size(image_info):
         raise BadRequest(
             "Image size is too large based on max size specified in the configuration",
             detail={
-                "requested_image_compressed_size_mb": anchore_utils.bytes_to_mb(
+                "requested_image_compressed_size_mb": utils.bytes_to_mb(
                     image_info["compressed_size"], round_to=2
                 ),
                 "max_compressed_image_size_mb": localconfig.get(
@@ -1920,7 +1919,7 @@ def add_or_update_image(
 
     image_ids = {}
     for d in digests:
-        image_info = anchore_engine.utils.parse_dockerimage_string(d)
+        image_info = utils.parse_dockerimage_string(d)
         registry = image_info["registry"]
         repo = image_info["repo"]
         digest = image_info["digest"]
@@ -1935,7 +1934,7 @@ def add_or_update_image(
             image_ids[registry][repo]["digests"].append(digest)
 
     for d in tags:
-        image_info = anchore_engine.utils.parse_dockerimage_string(d)
+        image_info = utils.parse_dockerimage_string(d)
         registry = image_info["registry"]
         repo = image_info["repo"]
         digest = image_info["tag"]
@@ -2767,7 +2766,7 @@ def is_image_valid_size(image_info):
         max_compressed_image_size_mb
         and max_compressed_image_size_mb > -1
         and compressed_image_size
-        and anchore_utils.bytes_to_mb(compressed_image_size, round_to=2)
+        and utils.bytes_to_mb(compressed_image_size, round_to=2)
         > max_compressed_image_size_mb
     ):
         return False
